@@ -47,13 +47,7 @@ class SnakeScreen extends JFrame implements Runnable {
 		this.width = width;
 		this.height = height;
 		
-		//radius = width / 50;
-		//snakeSize = width / 40;
-		//this.incX = radius;
-		//this.incY = 0;
-		//x = this.width / 4;
-		//y = this.height / 4;
-		
+	
 		snakePosition = new int[2][snakeSize];
 		previousPosition = new int[2][snakeSize];
 		
@@ -139,20 +133,21 @@ class SnakeScreen extends JFrame implements Runnable {
 		snakePosition[1][0] = y;
 		g.setColor(Color.RED);
 		g.drawOval(snakePosition[0][0], snakePosition[1][0], w, h);
+		g.fillOval(snakePosition[0][0], snakePosition[1][0], w, h);
 
 		for (int i = 1; i < snakeSize; i++) {
-
 			previousPosition[0][i] = snakePosition[0][i];
 			previousPosition[1][i] = snakePosition[1][i];
 
 			snakePosition[0][i] = previousPosition[0][i - 1];
 			snakePosition[1][i] = previousPosition[1][i - 1];
-			g.setColor(Color.GREEN);
+			g.setColor(Color.MAGENTA);
 			g.drawOval(snakePosition[0][i], snakePosition[1][i], w, h);
+			g.fillOval(snakePosition[0][i], snakePosition[1][i], w, h);
 		}
 
 		g.setColor(Color.WHITE);
 		g.drawOval(previousPosition[0][snakeSize - 1], previousPosition[1][snakeSize - 1], w, h);
-
+		g.fillOval(previousPosition[0][snakeSize - 1], previousPosition[1][snakeSize - 1], w, h);
 	}
 }
