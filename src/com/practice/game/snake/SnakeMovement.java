@@ -1,4 +1,4 @@
-package com.mani;
+package com.practice.game.snake;
 /*
  * Author: Manikanta Challa.
  * CreatedOn 28th Oct 2016
@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-public class SnakeGame {
+public class SnakeMovement {
 
 	public static void main(String[] args) {
 		SnakeScreen sc = new SnakeScreen(1000, 600);
