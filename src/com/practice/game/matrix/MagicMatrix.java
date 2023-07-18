@@ -25,7 +25,7 @@ public class MagicMatrix {
             if(row < 0 && col >= size){ //if diagonal cell not exist
                 row += 2;
                 col -= 1;
-            } else if(row < 0 && col < size){ //diagonal cell not exists due to row out of range
+            } else if(row < 0){ //diagonal cell not exists due to row out of range
                 row = size-1;
             }else if(row < size && col >= size){ //diagonal cell not exist due to column out of range
                 col = 0;
@@ -51,7 +51,7 @@ public class MagicMatrix {
                     System.out.print(GREEN_COLOR+String.format(" |%3d| ", matrix[i][j]));
                     System.out.print(WHITE_COLOR);
                 }else {
-                    System.out.print(String.format(" |%3d| ", matrix[i][j]));
+                    System.out.printf(" |%3d| ", matrix[i][j]);
                 }
             }
             System.out.println("\n");
@@ -69,15 +69,15 @@ public class MagicMatrix {
             for (int j = 0; j < matrix[i].length; j++) {
                 colSum[j] += matrix[i][j];
                 rowSum += matrix[i][j];
-                System.out.print(String.format(" |%3d| ", matrix[i][j]));
+                System.out.printf(" |%3d| ", matrix[i][j]);
             }
             System.out.print(GREEN_COLOR);
-            System.out.print(String.format(" %3d", rowSum));
+            System.out.printf(" %3d", rowSum);
             System.out.println("\n");
         }
 
         for(int i=0; i<colSum.length; i++){
-            System.out.print(String.format(" |%3d| ",colSum[i]));
+            System.out.printf(" |%3d| ",colSum[i]);
         }
     }
 
@@ -95,7 +95,7 @@ public class MagicMatrix {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter magic matrix size :");
         int size = scanner.nextInt();
-        System.out.println(String.format("Magic Matrix size %d",size));
+        System.out.printf("Magic Matrix size %d%n",size);
         MagicMatrix magicMatrix =  new MagicMatrix();
         int[][] matrix =  magicMatrix.createMagicMatrix(size);
         magicMatrix.validateMatrix(matrix);
