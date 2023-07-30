@@ -3,23 +3,23 @@ package com.practice.game.snake;
 
 public class FoodProducer extends  Thread {
 
-    private FoodLocation foodLocation;
+    private final FoodLocation foodLocation;
+    private int wait;
 
-    public FoodProducer(FoodLocation fm) {
-        foodLocation = fm;
+    public FoodProducer(FoodLocation foodLocation, int wait) {
+        this.foodLocation = foodLocation;
+        this.wait = wait;
     }
 
     public void run() {
-
         try {
-
             synchronized (foodLocation) {
                 foodLocation.produceFood();
-                foodLocation.wait(8000);
+                foodLocation.wait(wait);
             }
-
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            System.out.println("failed at food generation:"
+                    + ie.getMessage());
         }
     }
 }

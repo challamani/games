@@ -1,31 +1,37 @@
 package com.practice.game.snake;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class FoodLocation {
 
-    public int x;
-    public int y;
+    private int x;
+    private int y;
+    private final int xLimit;
+    private final int yLimit;
 
-    private int xLimit;
-    private int yLimit;
 
-
-    public FoodLocation(int xboundary, int yboundary) {
-        xLimit = xboundary;
-        yLimit = yboundary;
+    public FoodLocation(int xBoundary, int yBoundary) {
+        xLimit = xBoundary;
+        yLimit = yBoundary;
     }
 
-
     public void produceFood() {
-        x = new Random().nextInt(xLimit-50) + 1;
-        y = new Random().nextInt(yLimit-50) + 1;
-        System.out.println("produced :: ["+ x + "," + y +" ]");
+        x = ThreadLocalRandom.current()
+                .nextInt(100, xLimit - 100);
+        y = ThreadLocalRandom.current()
+                .nextInt(100, yLimit - 100);
     }
 
     public void consumeFood() {
-        System.out.println(x + " " + y + " score :: ");
         produceFood();
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

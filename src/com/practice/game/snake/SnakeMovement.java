@@ -47,34 +47,37 @@ class SnakeScreen extends JFrame implements Runnable {
 		setBackground(Color.BLACK);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
+
 			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
 				switch (e.getKeyCode()) {
-				case KeyEvent.VK_UP:
-					incY = -1 * radius;
-					incX = 0;
-					break;
-				case KeyEvent.VK_DOWN:
-					incY = radius;
-					incX = 0;
-					break;
-				case KeyEvent.VK_LEFT:
-					incX = -1 * radius;
-					incY = 0;
-					break;
-				case KeyEvent.VK_RIGHT:
-					incX = radius;
-					incY = 0;
-					break;
+					case KeyEvent.VK_DOWN:
+						incY = radius;
+						incX = 0;
+						break;
+					case KeyEvent.VK_UP:
+						incY = -1 * radius;
+						incX = 0;
+						break;
+					case KeyEvent.VK_LEFT:
+						incX = -1 * radius;
+						incY = 0;
+						break;
+					case KeyEvent.VK_RIGHT:
+						incX = radius;
+						incY = 0;
+						break;
 				}
 			}
 		});
@@ -88,28 +91,32 @@ class SnakeScreen extends JFrame implements Runnable {
 		}
 	}
 
-	public void run() {
-		while (true) {
-			try {
-				x += (x > (width - radius)) ? (-1 * (width - 2 * radius))
-						: (x < 2 * radius) ? width - 2 * radius : incX;
-				y += (y > (height - radius)) ? (-1 * (height - 2 * radius)) :
-						(y < 2 * radius) ? height - 2 * radius : incY;
-				repaint();
+	@Override
+	public void run(){
+		while (true){
+			try{
+				x += (x > (width-radius))?(-1 * (width-2*radius)):
+						x<2*radius?(width-2*radius):incX;
+				y += (y >(height-radius))?(-1 * (height - 2*radius)):
+						y<2*radius?(height-2*radius):incY;
+				repaint();//invokes paint method
 				Thread.sleep(200);
-			} catch (InterruptedException ie) {
-				System.out.println("failed at snake movement auto-increment " +
-						"block:" + ie.getMessage());
+			}catch (InterruptedException ie){
+				System.out.println("failed at snake auto path delay" +
+						""+ie.getMessage());
 			}
 		}
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		drawing(g, x, y, radius, radius);
 	}
 
-	public void drawing(Graphics g, int x, int y, int w, int h) {
-
+	//the actual logic
+	public void drawing(Graphics g, int x, int y, int w, int h){
+		//Here I'm following ant leader and followers algo
+		//Hold the previous position of snake head
 		previous[0][0] = snake[0][0];
 		previous[0][1] = snake[0][1];
 
@@ -117,22 +124,23 @@ class SnakeScreen extends JFrame implements Runnable {
 		snake[0][1] = y;
 
 		g.setColor(Color.MAGENTA);
-		g.drawOval(snake[0][0], snake[0][1], w, h);
-		g.fillOval(snake[0][0], snake[0][1], w, h);
+		g.drawOval(x,y,w,h);
+		g.fillOval(x,y,w,h);
 
-		for (int i = 1; i < size; i++) {
+		for(int i=1; i<size;i++){
 			previous[i][0] = snake[i][0];
 			previous[i][1] = snake[i][1];
 
-			snake[i][0] = previous[i - 1][0];
-			snake[i][1] = previous[i - 1][1];
+			snake[i][0] = previous[i-1][0];
+			snake[i][1] = previous[i-1][1];
 			g.setColor(Color.GREEN);
-			g.drawOval(snake[i][0], snake[i][1], w, h);
-			g.fillOval(snake[i][0], snake[i][1], w, h);
+			g.drawOval(snake[i][0],snake[i][1],w,h);
+			g.fillOval(snake[i][0],snake[i][1],w,h);
 		}
+
 		g.setColor(Color.BLACK);
-		g.drawOval(snake[size - 1][0], snake[size - 1][1], w, h);
-		g.fillOval(snake[size - 1][0], snake[size - 1][1], w, h);
+		g.drawOval(snake[size-1][0],snake[size-1][1],w,h);
+		g.fillOval(snake[size-1][0],snake[size-1][1],w,h);
 	}
 
 }
