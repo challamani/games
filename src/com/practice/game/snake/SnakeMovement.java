@@ -3,8 +3,8 @@ package com.practice.game.snake;
  * Author: Manikanta Challa.
  * CreatedOn 28th Oct 2016
  * Key Listener based snake movements capturing....
- * Runnable Interface implementation for Snake Movement capturing..
- * All parameters depends on Snake Ground (Width,Height)
+ * Runnable Interface implementation for Snake Movement capturing.
+ * All parameters depending on Snake Ground (Width,Height)
  * */
 
 import java.awt.Color;
@@ -15,61 +15,47 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 
 public class SnakeMovement {
-
 	public static void main(String[] args) {
-		SnakeScreen sc = new SnakeScreen(1000, 600);
+		SnakeScreen sc = new SnakeScreen(900, 900, 20);
 		new Thread(sc).start();
 	}
-
 }
 
 class SnakeScreen extends JFrame implements Runnable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private int x = 300;
 	private int y = 50;
-	private int radius = 10;
-	private int snakeSize = 15;
-	private int width = 1000;
-	private int height = 600;
-	private int incX = 10;
+	private int radius = 15;
+	private int size;
+	private int width;
+	private int height;
+	private int incX = 15;
 	private int incY = 0;
 
-	private int[][] snakePosition ;
-	private int[][] previousPosition;
+	private int[][] snake;
+	private int[][] previous;
 
-	SnakeScreen(int width, int height) {
-
+	SnakeScreen(int width, int height, int s) {
 		this.width = width;
 		this.height = height;
-		
-	
-		snakePosition = new int[2][snakeSize];
-		previousPosition = new int[2][snakeSize];
-		
-		setTitle("Snake Game By Mani:)");
+		this.size = s;
+		snake = new int[this.size][2];
+		previous = new int[this.size][2];
+
+		setTitle("Snake game implemented by @MyTechHub3");
 		setSize(this.width, this.height);
-		setBackground(Color.WHITE);
+		setBackground(Color.BLACK);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		addKeyListener(new KeyListener() {
-
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
-
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
@@ -90,33 +76,30 @@ class SnakeScreen extends JFrame implements Runnable {
 					incY = 0;
 					break;
 				}
-
 			}
 		});
-
 		initSnakePosition();
 	}
 
 	private void initSnakePosition() {
-		for (int i = 0; i < snakeSize; i++) {
-			snakePosition[0][i] = x - (i * radius);
-			snakePosition[1][i] = y;
+		for (int i = 0; i < size; i++) {
+			snake[i][0] = x - (i * radius);
+			snake[i][1] = y;
 		}
 	}
 
 	public void run() {
-
 		while (true) {
-
 			try {
-
-				x += (x > (width - radius))  ?  (-1 * (width - 2*radius)) : (x < 2 * radius) ? width - 2*radius : incX;
-				y += (y > (height - radius)) ?  (-1 * (height - 2*radius)) : (y < 2 * radius) ? height - 2*radius : incY;
+				x += (x > (width - radius)) ? (-1 * (width - 2 * radius))
+						: (x < 2 * radius) ? width - 2 * radius : incX;
+				y += (y > (height - radius)) ? (-1 * (height - 2 * radius)) :
+						(y < 2 * radius) ? height - 2 * radius : incY;
 				repaint();
 				Thread.sleep(200);
-
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (InterruptedException ie) {
+				System.out.println("failed at snake movement auto-increment " +
+						"block:" + ie.getMessage());
 			}
 		}
 	}
@@ -127,27 +110,29 @@ class SnakeScreen extends JFrame implements Runnable {
 
 	public void drawing(Graphics g, int x, int y, int w, int h) {
 
-		previousPosition[0][0] = snakePosition[0][0];
-		previousPosition[1][0] = snakePosition[1][0];
-		snakePosition[0][0] = x;
-		snakePosition[1][0] = y;
-		g.setColor(Color.RED);
-		g.drawOval(snakePosition[0][0], snakePosition[1][0], w, h);
-		g.fillOval(snakePosition[0][0], snakePosition[1][0], w, h);
+		previous[0][0] = snake[0][0];
+		previous[0][1] = snake[0][1];
 
-		for (int i = 1; i < snakeSize; i++) {
-			previousPosition[0][i] = snakePosition[0][i];
-			previousPosition[1][i] = snakePosition[1][i];
+		snake[0][0] = x;
+		snake[0][1] = y;
 
-			snakePosition[0][i] = previousPosition[0][i - 1];
-			snakePosition[1][i] = previousPosition[1][i - 1];
-			g.setColor(Color.MAGENTA);
-			g.drawOval(snakePosition[0][i], snakePosition[1][i], w, h);
-			g.fillOval(snakePosition[0][i], snakePosition[1][i], w, h);
+		g.setColor(Color.MAGENTA);
+		g.drawOval(snake[0][0], snake[0][1], w, h);
+		g.fillOval(snake[0][0], snake[0][1], w, h);
+
+		for (int i = 1; i < size; i++) {
+			previous[i][0] = snake[i][0];
+			previous[i][1] = snake[i][1];
+
+			snake[i][0] = previous[i - 1][0];
+			snake[i][1] = previous[i - 1][1];
+			g.setColor(Color.GREEN);
+			g.drawOval(snake[i][0], snake[i][1], w, h);
+			g.fillOval(snake[i][0], snake[i][1], w, h);
 		}
-
-		g.setColor(Color.WHITE);
-		g.drawOval(previousPosition[0][snakeSize - 1], previousPosition[1][snakeSize - 1], w, h);
-		g.fillOval(previousPosition[0][snakeSize - 1], previousPosition[1][snakeSize - 1], w, h);
+		g.setColor(Color.BLACK);
+		g.drawOval(snake[size - 1][0], snake[size - 1][1], w, h);
+		g.fillOval(snake[size - 1][0], snake[size - 1][1], w, h);
 	}
+
 }
